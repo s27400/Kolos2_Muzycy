@@ -1,4 +1,6 @@
 using Kolos2_Muzycy.Enitities;
+using Kolos2_Muzycy.Repositories;
+using Kolos2_Muzycy.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMusicRepository, MusicReposiotry>();
+builder.Services.AddScoped<IMusicService, MusicService>();
 
 
 builder.Services.AddDbContext<MusicDbContext>(opt =>
@@ -27,9 +31,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
-
-
-
 
 
 app.Run();
