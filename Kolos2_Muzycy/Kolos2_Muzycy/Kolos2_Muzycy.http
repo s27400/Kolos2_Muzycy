@@ -1,0 +1,6 @@
+@Kolos2_Muzycy_HostAddress = http://localhost:5298
+
+GET {{Kolos2_Muzycy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
