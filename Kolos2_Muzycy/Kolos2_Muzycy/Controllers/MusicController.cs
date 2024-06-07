@@ -1,3 +1,4 @@
+using Kolos2_Muzycy.DTOs;
 using Kolos2_Muzycy.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,5 +26,11 @@ public class MusicController : ControllerBase
         }
 
         return NotFound($"Muzyk z id: {id} nie istnieje");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddMusicianWithTrack(ToAddDTO dto, CancellationToken token)
+    {
+        return Ok(await _musicService.AddMusicianWithTrack(dto, token));
     }
 }

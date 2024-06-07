@@ -74,7 +74,9 @@ public class MusicReposiotry : IMusicRepository
             Pseudonim = dto.Pseudonim
         }, token);
 
-        await _context.SaveChangesAsync(token);
+
+            await _context.SaveChangesAsync(token);
+            
         return "Added musucian";
     }
 
@@ -82,14 +84,14 @@ public class MusicReposiotry : IMusicRepository
     {
         var res = await _context.Muzycy
             .FirstOrDefaultAsync(x => x.Imie == dto.Imie && x.Nazwisko == dto.Nazwisko, token);
-
+        
         return res.IdMuzyk;
     }
 
     public async Task<int> CheckIfTrackExist(ToAddDTO dto, CancellationToken token)
     {
         var checker = await _context.Utwory
-            .FirstOrDefaultAsync(x => x.IdUtwor == dto.IdUtworu);
+            .FirstOrDefaultAsync(x => x.IdUtwor == dto.IdUtworu, token);
 
         if (checker != null)
         {

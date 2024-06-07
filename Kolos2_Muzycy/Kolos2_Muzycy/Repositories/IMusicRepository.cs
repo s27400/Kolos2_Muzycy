@@ -11,7 +11,8 @@ public interface IMusicRepository
     public Task<int> CheckIfTrackExist(ToAddDTO dto, CancellationToken token);
     public Task<string> AddTrack(ToAddDTO dto, CancellationToken token);
     public Task<int> GetNewTrackId(ToAddDTO dto, CancellationToken token);
-    
+    public Task<string> AddTrackToMusician(int idMuzyk, int idUtwor, CancellationToken token);
+
 
 
 
