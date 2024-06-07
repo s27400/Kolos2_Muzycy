@@ -21,4 +21,19 @@ public class MusicService : IMusicService
     {
         return await _musicRepository.GetMusicianWithTracks(id, token);
     }
+
+    public async Task<string> AddMusicianWithTrack(ToAddDTO dto, CancellationToken token)
+    {
+        await _musicRepository.AddMusician(dto, token);
+        int MuzykId = await _musicRepository.GetNewMusicianId(dto, token);
+        if (dto.IdUtworu != 0)
+        {
+            int verify = await _musicRepository.CheckIfTrackExist(dto, token);
+
+            if (verify != 0)
+            {
+                
+            }
+        }
+    }
 }

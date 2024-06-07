@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using Kolos2_Muzycy.DTOs;
 using Kolos2_Muzycy.Enitities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Kolos2_Muzycy.Repositories;
 
@@ -62,4 +64,69 @@ public class MusicReposiotry : IMusicRepository
         return toDTO;
 
     }
+
+    public async Task<string> AddMusician(ToAddDTO dto, CancellationToken token)
+    {
+        await _context.Muzycy.AddAsync(new Muzyk()
+        {
+            Imie = dto.Imie,
+            Nazwisko = dto.Nazwisko,
+            Pseudonim = dto.Pseudonim
+        }, token);
+
+        await _context.SaveChangesAsync(token);
+        return "Added musucian";
+    }
+
+    public async Task<int> GetNewMusicianId(ToAddDTO dto, CancellationToken token)
+    {
+        var res = await _context.Muzycy
+            .FirstOrDefaultAsync(x => x.Imie == dto.Imie && x.Nazwisko == dto.Nazwisko, token);
+
+        return res.IdMuzyk;
+    }
+
+    public async Task<int> CheckIfTrackExist(ToAddDTO dto, CancellationToken token)
+    {
+        var checker = await _context.Utwory
+            .FirstOrDefaultAsync(x => x.IdUtwor == dto.IdUtworu);
+
+        if (checker != null)
+        {
+            return checker.IdUtwor;
+        }
+
+        return 0;
+    }
+
+    public async Task<string> AddTrack(ToAddDTO dto, CancellationToken token)
+    {
+            await _context.Utwory.AddAsync(new Utwor()
+            {
+                CzasTrwania = dto.CzasTrwania,
+                NazwaUtworu = dto.NazwaUtworu,
+                IdAlbum = dto.IdAlbum
+            }, token);
+            await _context.SaveChangesAsync(token);
+            return "Dodalem utwor";
+    }
+
+    public async Task<int> GetNewTrackId(ToAddDTO dto, CancellationToken token)
+    {
+        var res = await _context.Utwory
+            .FirstOrDefaultAsync(x => x.NazwaUtworu == dto.NazwaUtworu && x.IdAlbum == dto.IdAlbum, token);
+        return res.IdUtwor;
+    }
+
+    public async Task<string> AddTrackToMusician(int idMuzyk, int idUtwor, CancellationToken token)
+    {
+        Muzyk muzyk = await _context.Muzycy.SingleAsync(x => x.IdMuzyk == idMuzyk, token);
+        Utwor utwor = await _context.Utwory.SingleAsync(x => x.IdUtwor == idUtwor, token);
+        
+        muzyk.UtworyMuzyk.Add(utwor);
+        
+        await _context.SaveChangesAsync(token);
+        return "Dodalem muzyka do utwor";
+    }
+
 }
